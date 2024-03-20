@@ -73,6 +73,7 @@ app.get('/api/recetas', async (req, res) => {
 
   const start = async () => {
     try {
+        console.log (process.env.MONGO_CONNECTION_STRING)
       await mongoose.connect(process.env.MONGO_CONNECTION_STRING);
       app.listen(8080, () => console.log("Server started on port 8080"));
     } catch (error) {
