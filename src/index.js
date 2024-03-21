@@ -23,7 +23,7 @@ app.get('/api/recetas', async (req, res) => {
 
   app.get('/api/recetas/:id', async (req, res) => {
     try {
-      const receta = await Recetas.findById(req.params.id);
+      const receta = await Recetas.findById(req.params._id);
       if (!receta) {
         return res.status(404).json({ error: "Receta no encontrada" });
       }
@@ -35,8 +35,12 @@ app.get('/api/recetas', async (req, res) => {
   });
 
   app.post('/api/recetas', async (req, res) => {
+    const name = req.body?.name;
+    const ingredientes = req.body?.ingredientes;
+    const instrucciones = req.body?.instrucciones;
+
     try {
-      const nuevaReceta = new Recetas(req.body);
+      nuevaReceta = new Recetas({name: name, ingredientes: ingredientes, instrucciones: instrucciones});
       await nuevaReceta.save();
       res.json({ success: true, id: nuevaReceta._id });
     } catch (error) {
@@ -73,8 +77,8 @@ app.get('/api/recetas', async (req, res) => {
 
   const start = async () => {
     try {
-        console.log (process.env.MONGO_CONNECTION_STRING)
-      await mongoose.connect(process.env.MONGO_CONNECTION_STRING);
+    
+     await mongoose.connect(process.env.MONGO_CONNECTION_STRING);
       app.listen(8080, () => console.log("Server started on port 8080"));
     } catch (error) {
       console.error(error);
